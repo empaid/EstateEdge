@@ -7,11 +7,12 @@
 package auth
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -24,7 +25,7 @@ const (
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	Passowrd      string                 `protobuf:"bytes,2,opt,name=passowrd,proto3" json:"passowrd,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -66,17 +67,17 @@ func (x *LoginRequest) GetUsername() string {
 	return ""
 }
 
-func (x *LoginRequest) GetPassowrd() string {
+func (x *LoginRequest) GetPassword() string {
 	if x != nil {
-		return x.Passowrd
+		return x.Password
 	}
 	return ""
 }
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	ExpiresAt     int64                  `protobuf:"varint,2,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,23 +112,23 @@ func (*LoginResponse) Descriptor() ([]byte, []int) {
 	return file_auth_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *LoginResponse) GetAccessToken() string {
+func (x *LoginResponse) GetSuccess() bool {
 	if x != nil {
-		return x.AccessToken
+		return x.Success
+	}
+	return false
+}
+
+func (x *LoginResponse) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
 
-func (x *LoginResponse) GetExpiresAt() int64 {
-	if x != nil {
-		return x.ExpiresAt
-	}
-	return 0
-}
-
 type ValidateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	AuthToken     string                 `protobuf:"bytes,1,opt,name=authToken,proto3" json:"authToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -162,17 +163,17 @@ func (*ValidateRequest) Descriptor() ([]byte, []int) {
 	return file_auth_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ValidateRequest) GetToken() string {
+func (x *ValidateRequest) GetAuthToken() string {
 	if x != nil {
-		return x.Token
+		return x.AuthToken
 	}
 	return ""
 }
 
 type ValidateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
-	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -207,16 +208,16 @@ func (*ValidateResponse) Descriptor() ([]byte, []int) {
 	return file_auth_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ValidateResponse) GetValid() bool {
+func (x *ValidateResponse) GetSuccess() bool {
 	if x != nil {
-		return x.Valid
+		return x.Success
 	}
 	return false
 }
 
-func (x *ValidateResponse) GetUsername() string {
+func (x *ValidateResponse) GetUserId() string {
 	if x != nil {
-		return x.Username
+		return x.UserId
 	}
 	return ""
 }
@@ -229,19 +230,18 @@ const file_auth_proto_rawDesc = "" +
 	"auth.proto\"F\n" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassowrd\x18\x02 \x01(\tR\bpassowrd\"Q\n" +
-	"\rLoginResponse\x12!\n" +
-	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12\x1d\n" +
-	"\n" +
-	"expires_at\x18\x02 \x01(\x03R\texpiresAt\"'\n" +
-	"\x0fValidateRequest\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"D\n" +
-	"\x10ValidateResponse\x12\x14\n" +
-	"\x05valid\x18\x01 \x01(\bR\x05valid\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername2f\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"A\n" +
+	"\rLoginResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
+	"\x06userId\x18\x02 \x01(\tR\x06userId\"/\n" +
+	"\x0fValidateRequest\x12\x1c\n" +
+	"\tauthToken\x18\x01 \x01(\tR\tauthToken\"D\n" +
+	"\x10ValidateResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
+	"\x06userId\x18\x02 \x01(\tR\x06userId2f\n" +
 	"\vAuthService\x12&\n" +
 	"\x05Login\x12\r.LoginRequest\x1a\x0e.LoginResponse\x12/\n" +
-	"\bValidate\x12\x10.ValidateRequest\x1a\x11.ValidateResponseB*Z(github.com/empaid/estateedge/common/authb\x06proto3"
+	"\bValidate\x12\x10.ValidateRequest\x1a\x11.ValidateResponseB(Z&github.com/empaid/services/common/authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once

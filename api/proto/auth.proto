@@ -1,28 +1,28 @@
 syntax = "proto3";
 
-option go_package = "github.com/empaid/estateedge/common/auth";
+option go_package="github.com/empaid/services/common/auth";
 
 service AuthService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc Validate(ValidateRequest) returns (ValidateResponse);
-}
+};
 
-message LoginRequest {
-    string username = 1;
-    string passowrd = 2;
+
+message LoginRequest{
+    string username =1;
+    string password = 2;
 }
 
 message LoginResponse {
-    string access_token = 1;
-    int64 expires_at = 2;
+    bool success = 1;
+    string userId = 2;
 }
 
 message ValidateRequest {
-    string token = 1;
-
+    string authToken = 1;
 }
+
 message ValidateResponse {
-    bool valid = 1;
-    string username = 2;
+    bool success = 1;
+    string userId = 2;
 }
-
