@@ -1,19 +1,34 @@
 package main
 
 import (
-	"github.com/empaid/estateedge/pkg/config"
+	"log"
+	"net"
+
+	"github.com/empaid/estateedge/services/auth/internal/repository"
+	"github.com/empaid/estateedge/services/common/genproto/auth"
+	_ "github.com/lib/pq"
+	"google.golang.org/grpc"
 )
 
 func main() {
+	// log.Print("New server started")
 
-	cfg := cfg{
-		addr: config.GetString("ADDR", ":3000"),
+	lis, err := net.Listen("tcp", ":3000")
+	if err != nil {
+		log.Printf("failed to start the GRPC server: %s", ":3000")
 	}
 
-	app := &application{
-		config: cfg,
-	}
+	grpcServer := grpc.NewServer()
+	db := repository.NewConnection()
 
-	app.Run()
+	authHandler := authService{
+		store: repository.NewStorage(db.Conn),
+	}
+	auth.RegisterAuthServiceServer(grpcServer, authHandler)
+	log.Print("Server started listening ")
+	err = grpcServer.Serve(lis)
+	if err != nil {
+		log.Fatal("Error while creating server")
+	}
 
 }

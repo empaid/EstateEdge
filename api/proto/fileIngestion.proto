@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package="github.com/empaid/services/common/fileIngestion";
+
+service FileIngestionService {
+    rpc ReturnPreSignedUploadURL(UploadRequest) returns (UploadResponse);
+
+};
+
+message File {
+    string id = 1;
+    string name = 2;
+    string extension = 3;
+    string location = 4;
+    string bucket = 5;
+    string externalServiceFileId = 6;
+}
+
+message UploadRequest{
+    File file = 1;
+}
+
+message UploadResponse {
+    string URL = 1;
+    File file = 2;
+}
+
