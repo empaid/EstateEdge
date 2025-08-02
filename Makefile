@@ -1,6 +1,8 @@
 run-auth:
 	@cd services/auth && go run cmd/auth-server/*.go 
 
+run-grpc-client:
+	@cd client && go run *.go 
 
 gen:
 	@protoc \

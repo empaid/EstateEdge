@@ -5,6 +5,7 @@ option go_package="github.com/empaid/services/common/auth";
 service AuthService {
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc Validate(ValidateRequest) returns (ValidateResponse);
+    rpc Register(RegisterRequest) returns (RegisterResponse);
 };
 
 
@@ -15,7 +16,7 @@ message LoginRequest{
 
 message LoginResponse {
     bool success = 1;
-    string userId = 2;
+    string authToken = 2;
 }
 
 message ValidateRequest {
@@ -25,4 +26,15 @@ message ValidateRequest {
 message ValidateResponse {
     bool success = 1;
     string userId = 2;
+}
+
+message RegisterRequest {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message RegisterResponse {
+    bool success = 1;
+    string authToken = 2;
 }

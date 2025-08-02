@@ -7,12 +7,11 @@
 package auth
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -77,7 +76,7 @@ func (x *LoginRequest) GetPassword() string {
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=userId,proto3" json:"userId,omitempty"`
+	AuthToken     string                 `protobuf:"bytes,2,opt,name=authToken,proto3" json:"authToken,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,9 +118,9 @@ func (x *LoginResponse) GetSuccess() bool {
 	return false
 }
 
-func (x *LoginResponse) GetUserId() string {
+func (x *LoginResponse) GetAuthToken() string {
 	if x != nil {
-		return x.UserId
+		return x.AuthToken
 	}
 	return ""
 }
@@ -222,6 +221,118 @@ func (x *ValidateResponse) GetUserId() string {
 	return ""
 }
 
+type RegisterRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterRequest) Reset() {
+	*x = RegisterRequest{}
+	mi := &file_auth_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterRequest) ProtoMessage() {}
+
+func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
+func (*RegisterRequest) Descriptor() ([]byte, []int) {
+	return file_auth_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RegisterRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type RegisterResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	AuthToken     string                 `protobuf:"bytes,2,opt,name=authToken,proto3" json:"authToken,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterResponse) Reset() {
+	*x = RegisterResponse{}
+	mi := &file_auth_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterResponse) ProtoMessage() {}
+
+func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
+func (*RegisterResponse) Descriptor() ([]byte, []int) {
+	return file_auth_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RegisterResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RegisterResponse) GetAuthToken() string {
+	if x != nil {
+		return x.AuthToken
+	}
+	return ""
+}
+
 var File_auth_proto protoreflect.FileDescriptor
 
 const file_auth_proto_rawDesc = "" +
@@ -230,18 +341,26 @@ const file_auth_proto_rawDesc = "" +
 	"auth.proto\"F\n" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"A\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"G\n" +
 	"\rLoginResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
-	"\x06userId\x18\x02 \x01(\tR\x06userId\"/\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1c\n" +
+	"\tauthToken\x18\x02 \x01(\tR\tauthToken\"/\n" +
 	"\x0fValidateRequest\x12\x1c\n" +
 	"\tauthToken\x18\x01 \x01(\tR\tauthToken\"D\n" +
 	"\x10ValidateResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
-	"\x06userId\x18\x02 \x01(\tR\x06userId2f\n" +
+	"\x06userId\x18\x02 \x01(\tR\x06userId\"_\n" +
+	"\x0fRegisterRequest\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"J\n" +
+	"\x10RegisterResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1c\n" +
+	"\tauthToken\x18\x02 \x01(\tR\tauthToken2\x97\x01\n" +
 	"\vAuthService\x12&\n" +
 	"\x05Login\x12\r.LoginRequest\x1a\x0e.LoginResponse\x12/\n" +
-	"\bValidate\x12\x10.ValidateRequest\x1a\x11.ValidateResponseB(Z&github.com/empaid/services/common/authb\x06proto3"
+	"\bValidate\x12\x10.ValidateRequest\x1a\x11.ValidateResponse\x12/\n" +
+	"\bRegister\x12\x10.RegisterRequest\x1a\x11.RegisterResponseB(Z&github.com/empaid/services/common/authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once
@@ -255,20 +374,24 @@ func file_auth_proto_rawDescGZIP() []byte {
 	return file_auth_proto_rawDescData
 }
 
-var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_auth_proto_goTypes = []any{
 	(*LoginRequest)(nil),     // 0: LoginRequest
 	(*LoginResponse)(nil),    // 1: LoginResponse
 	(*ValidateRequest)(nil),  // 2: ValidateRequest
 	(*ValidateResponse)(nil), // 3: ValidateResponse
+	(*RegisterRequest)(nil),  // 4: RegisterRequest
+	(*RegisterResponse)(nil), // 5: RegisterResponse
 }
 var file_auth_proto_depIdxs = []int32{
 	0, // 0: AuthService.Login:input_type -> LoginRequest
 	2, // 1: AuthService.Validate:input_type -> ValidateRequest
-	1, // 2: AuthService.Login:output_type -> LoginResponse
-	3, // 3: AuthService.Validate:output_type -> ValidateResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	4, // 2: AuthService.Register:input_type -> RegisterRequest
+	1, // 3: AuthService.Login:output_type -> LoginResponse
+	3, // 4: AuthService.Validate:output_type -> ValidateResponse
+	5, // 5: AuthService.Register:output_type -> RegisterResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -285,7 +408,7 @@ func file_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_proto_rawDesc), len(file_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
