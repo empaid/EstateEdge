@@ -40,4 +40,12 @@ func main() {
 	}
 	log.Print(loginRes)
 
+	validateResponse, errr := client.Validate(context.Background(), &auth.ValidateRequest{
+		AuthToken: loginRes.AuthToken,
+	})
+	if errr != nil {
+		log.Fatal("error while calling grpc function", errr)
+	}
+	log.Print(validateResponse)
+
 }

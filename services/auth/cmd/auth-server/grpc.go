@@ -50,11 +50,23 @@ func (a authService) Login(ctx context.Context, req *auth.LoginRequest) (*auth.L
 
 func (a authService) Validate(ctx context.Context, req *auth.ValidateRequest) (*auth.ValidateResponse, error) {
 
-	res := &auth.ValidateResponse{
-		Success: true,
-		UserId:  req.AuthToken,
+	parsed, err := jwt.Parse(req.AuthToken, func(t *jwt.Token) (interface{}, error) {
+		return []byte("temp_secret_key_store_in_env"), nil
+	})
+	if err != nil {
+		log.Print("Invalid Auth token: ", err)
+		return nil, err
 	}
-	return res, nil
+	claims, ok := parsed.Claims.(jwt.MapClaims)
+	if !ok {
+		log.Print("Invalid Claims", err)
+		return nil, err
+	}
+
+	return &auth.ValidateResponse{
+		UserId:  claims["id"].(string),
+		Success: true,
+	}, nil
 }
 
 func (a authService) Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error) {
