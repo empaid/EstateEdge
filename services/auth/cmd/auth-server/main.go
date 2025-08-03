@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/empaid/estateedge/pkg/env"
 	"github.com/empaid/estateedge/services/auth/internal/repository"
 	"github.com/empaid/estateedge/services/common/genproto/auth"
 	_ "github.com/lib/pq"
@@ -13,9 +14,9 @@ import (
 func main() {
 	// log.Print("New server started")
 
-	lis, err := net.Listen("tcp", ":3000")
+	lis, err := net.Listen("tcp", env.GetString("AUTH_SERVICE_ADDR", ""))
 	if err != nil {
-		log.Printf("failed to start the GRPC server: %s", ":3000")
+		log.Printf("failed to start the GRPC server: %s", env.GetString("AUTH_SERVICE_ADDR", ""))
 	}
 
 	grpcServer := grpc.NewServer()

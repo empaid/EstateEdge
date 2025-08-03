@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+package fileIngestion;
 option go_package="github.com/empaid/services/common/fileIngestion";
 
 service FileIngestionService {

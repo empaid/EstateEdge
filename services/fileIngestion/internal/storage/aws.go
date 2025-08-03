@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/empaid/estateedge/pkg/env"
 	"github.com/empaid/estateedge/services/common/genproto/fileIngestion"
 )
 
@@ -48,7 +49,7 @@ func (s *AwsStorage) ReturnPreSignedUploadURL(ctx context.Context, file *fileIng
 func NewAwsStorage(ctx context.Context) (*AwsStorage, error) {
 
 	cfg, err := config.LoadDefaultConfig(ctx,
-		config.WithRegion("us-east-1"),
+		config.WithRegion(env.GetString("AWS_DEFAULT_REGION", "")),
 		config.WithCredentialsProvider(
 			credentials.NewStaticCredentialsProvider("test", "test", ""),
 		),
@@ -58,7 +59,7 @@ func NewAwsStorage(ctx context.Context) (*AwsStorage, error) {
 		return nil, err
 	}
 	client := s3.NewFromConfig(cfg, func(o *s3.Options) {
-		o.BaseEndpoint = aws.String("http://localhost:4566")
+		o.BaseEndpoint = aws.String(env.GetString("AWS_BASE_ENDPOINT", ""))
 		o.UsePathStyle = true
 	})
 	presigner := s3.NewPresignClient(client)

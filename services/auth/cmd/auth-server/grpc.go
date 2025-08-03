@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/empaid/estateedge/pkg/env"
 	"github.com/empaid/estateedge/services/auth/internal/repository"
 	"github.com/empaid/estateedge/services/common/genproto/auth"
 	"github.com/golang-jwt/jwt/v5"
@@ -34,7 +35,7 @@ func (a authService) Login(ctx context.Context, req *auth.LoginRequest) (*auth.L
 		"id":       user.ID,
 	})
 
-	authToken, err := token.SignedString([]byte("temp_secret_key_store_in_env"))
+	authToken, err := token.SignedString([]byte(env.GetString("JWT_SIGNING_SECRET_KEY", "")))
 
 	if err != nil {
 		log.Print("Error while Login: ", err)

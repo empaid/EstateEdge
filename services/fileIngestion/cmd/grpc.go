@@ -49,7 +49,7 @@ func NewGrpcServer(addr string) {
 	grpc := grpc.NewServer()
 
 	fileIngestion.RegisterFileIngestionServiceServer(grpc, fileIngestionHandler)
-	log.Print("Server started listening on :4000")
+	log.Print("Server started listening")
 	err = grpc.Serve(lis)
 	if err != nil {
 		log.Fatal("Unable to start grpc server:", err)
