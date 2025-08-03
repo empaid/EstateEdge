@@ -3,4 +3,3 @@ bin/
 tmp/
 
 *.pb.go
-client/
