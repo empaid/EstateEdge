@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/empaid/estateedge/pkg/env"
+	_ "github.com/lib/pq"
 )
 
 func NewDBConection() (*sql.DB, error) {

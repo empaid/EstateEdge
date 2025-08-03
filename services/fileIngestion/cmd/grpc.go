@@ -36,7 +36,7 @@ func NewGrpcServer(addr string) {
 	if err != nil {
 		log.Fatal("Unable to start auth server:", err)
 	}
-
+	defer lis.Close()
 	ctx := context.Background()
 	awsStorage, err := storage.NewAwsStorage(ctx)
 	if err != nil {
@@ -49,7 +49,7 @@ func NewGrpcServer(addr string) {
 	grpc := grpc.NewServer()
 
 	fileIngestion.RegisterFileIngestionServiceServer(grpc, fileIngestionHandler)
-	log.Print("Server started listening")
+	log.Print("FileIngestion Service started listening ", addr)
 	err = grpc.Serve(lis)
 	if err != nil {
 		log.Fatal("Unable to start grpc server:", err)
