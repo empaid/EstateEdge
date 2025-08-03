@@ -3,10 +3,12 @@ package repository
 import (
 	"database/sql"
 	"log"
+
+	"github.com/empaid/estateedge/pkg/env"
 )
 
 func New() (*sql.DB, error) {
-	conn, err := sql.Open("postgres", "postgres://admin:adminpassword@localhost:5432/social?sslmode=disable")
+	conn, err := sql.Open("postgres", env.GetString("POSTGRES_DB", ""))
 	if err != nil {
 		log.Printf("Error opening connection to database: %s", err)
 	}

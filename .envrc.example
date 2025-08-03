@@ -1,0 +1,8 @@
+export POSTGRES_DB="postgres://admin:adminpassword@localhost:5432/social?sslmode=disable"
+export AUTH_SERVICE_ADDR="localhost:3000"
+export FILE_INGESTION_SERVICE_ADDR="localhost:4000"
+export WORKER_SERVICE_ADDR="localhost:5000"
+export AWS_BASE_ENDPOINT="http://localhost:4566"
+export AWS_DEFAULT_REGION="us-east-1"
+export AWS_S3_BUCKET_NAME="file-uploads"
+export JWT_SIGNING_SECRET_KEY="temp_secret_key"

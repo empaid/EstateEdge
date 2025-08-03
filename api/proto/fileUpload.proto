@@ -1,0 +1,15 @@
+syntax="proto3";
+package fileUpload;
+option go_package="github.com/empaid/services/common/fileUpload";
+
+service FileUploadService {
+    rpc UploadFile(UploadRequest) returns (UploadResponse);
+}
+
+message UploadRequest {
+    int64 userId = 1;
+}
+
+message UploadResponse {
+    string uploadURL = 1;
+}

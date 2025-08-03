@@ -3,6 +3,5 @@ package main
 import "github.com/empaid/estateedge/pkg/env"
 
 func main() {
-	NewGrpcServer(env.GetString("FILE_INGESTION_SERVICE_ADDR", ""))
-
+	NewGrpcServer(env.GetString("WORKER_SERVICE_ADDR", ""))
 }
