@@ -7,6 +7,9 @@ run-fileIngestion:
 run-worker:
 	@cd services/worker && go run cmd/*.go 
 
+run-analyzer:
+	@cd services/fileAnalyserService && go run cmd/*.go 
+
 run-grpc-client:
 	@cd client && go run *.go 
 

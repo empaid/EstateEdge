@@ -19,16 +19,22 @@ func main() {
 		log.Fatal("KAFKA_BROKERS env var is required")
 	}
 	brokers := strings.Split(brokersEnv, ",")
-	topic := os.Getenv("KAFKA_TOPIC_FILE_UPLOAD")
-	if topic == "" {
+	topic_file_upload := os.Getenv("KAFKA_TOPIC_FILE_UPLOAD")
+	if topic_file_upload == "" {
 		log.Fatal("KAFKA_TOPIC_FILE_UPLOAD env var is required")
 	}
+
+	topic_analyze_complete := os.Getenv("KAFKA_TOPIC_FILE_ANALYZE_COMPLETE")
+	if topic_analyze_complete == "" {
+		log.Fatal("KAFKA_TOPIC_FILE_ANALYZE_COMPLETE env var is required")
+	}
+
 	groupId := os.Getenv("KAFKA_GROUP_ID")
 	if groupId == "" {
 		log.Fatal("KAFKA_GROUP_ID env var is required")
 	}
-
-	reader := kafka.NewReader(brokers, topic, groupId)
+	topics := []string{topic_file_upload, topic_analyze_complete}
+	reader := kafka.NewReader(brokers, topics, groupId)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
