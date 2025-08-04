@@ -29,10 +29,10 @@ gen:
 
 
 
-.PHONY: deploy-s3-listener-lambda
-deploy-s3-listener-lambda:
+.PHONY: deploy-lambda
+deploy-lambda:
 	@echo "🔨 Building lambda binary…"
-	@GOOS=linux GOARCH=arm64 go build -o bin/${LAMBDA_FUNCTION_NAME} services/s3UploadListener/main.go
+	@GOOS=linux go build -o bin/${LAMBDA_FUNCTION_NAME} services/s3UploadListener/main.go
 
 	@echo "📦 Zipping…"
 	@zip -j bin/${LAMBDA_FUNCTION_NAME}.zip bin/${LAMBDA_FUNCTION_NAME}
@@ -62,17 +62,24 @@ deploy-s3-listener-lambda:
 	    lambda update-function-code \
 	      --function-name ${LAMBDA_FUNCTION_NAME} \
 	      --zip-file fileb://bin/${LAMBDA_FUNCTION_NAME}.zip
+		  
 
 	@echo "⚙️  Updating env var API_ENDPOINT…"
 	@awslocal --endpoint-url=${AWS_BASE_ENDPOINT} --region=${AWS_DEFAULT_REGION} \
 	    lambda update-function-configuration \
 	      --function-name ${LAMBDA_FUNCTION_NAME} \
-	      --environment "Variables={API_ENDPOINT=${API_ENDPOINT}}"
+		--timeout 120 \
+	      --environment "Variables={\
+		KAFKA_BROKERS=${KAFKA_BROKERS},\
+		API_ENDPOINT=${API_ENDPOINT},\
+		KAFKA_TOPIC_FILE_UPLOAD=${KAFKA_TOPIC_FILE_UPLOAD}\
+		}"
+		
 
 
 
-.PHONY: deploy-s3-listener-assign-s3
-deploy-s3-listener-assign-s3:
+.PHONY: enable-s3-notifications
+enable-s3-notifications:
 
 	@echo "🔑 Granting S3 permission to invoke Lambda…"
 	@awslocal --endpoint-url=${AWS_BASE_ENDPOINT} --region=${AWS_DEFAULT_REGION} \
@@ -91,6 +98,6 @@ deploy-s3-listener-assign-s3:
 	      --notification-configuration '{\
 "LambdaFunctionConfigurations":[{\
   "LambdaFunctionArn":"arn:aws:lambda:'${AWS_DEFAULT_REGION}':000000000000:function:'${LAMBDA_FUNCTION_NAME}'",\
-  "Events":["s3:ObjectCreated:*"]\
+  "Events":["s3:ObjectCreated:Put"]\
 }]\
 }'
