@@ -22,3 +22,11 @@ func (s *FilesStore) CreateFile(ctx context.Context, file *File) error {
 	}
 	return nil
 }
+
+func (s *FilesStore) ChangeFileStatus(ctx context.Context, file *File) error {
+	if err := s.db.QueryRowContext(ctx, `UPDATE files SET status = $2 WHERE id=$1 returning id`, file.ID, file.Status).Scan(&file.ID); err != nil {
+		log.Fatal("Unable to Update file status", err)
+		return err
+	}
+	return nil
+}
